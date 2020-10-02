@@ -1,5 +1,6 @@
 # Group Assignment
 
+penispenispenispenis
 
 def covid(days, time, compliance):
     try:
