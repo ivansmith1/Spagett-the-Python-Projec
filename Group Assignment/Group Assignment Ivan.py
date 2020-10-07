@@ -35,7 +35,7 @@ def testing(initial, rate, days):
     return tests
 
 
-def covid(days, growth, compliance_rate):
+def covid(answer=input('Calculate COVID-19 cases? (Y/N): ')):
     # open file
     try:
         data = open('data.txt', 'r')
@@ -55,30 +55,35 @@ def covid(days, growth, compliance_rate):
     states = []
     numbers = []
 
+    # create nested list containing lists for each state
     rows_list = []
 
     # loop creator
-    answer = True
+    if answer == 'Y' or answer == 'y':
+        cont = True
+    else:
+        cont = False
 
-    while answer:
+    while cont:
 
+        days = int(input('Enter days to calculate: '))
+        growth = float(input('Enter growth rate: '))
+        compliance_rate = int(input('Enter social distancing compliance %: '))
+
+        # move state names into one list, and numbers into another
         for line in clean_records:
             if line.isdigit():
                 numbers.append(line)
             elif line.isupper():
                 states.append(line)
 
-        print('Initial numbers:', numbers)
-
         # add day column
-
-        day = 0
-        daze = []
+        day_column = []
 
         for i in range(days):
-            daze.append(i + 1)
+            day_column.append(i + 1)
 
-        rows_list.append(daze)
+        rows_list.append(day_column)
 
         # add test data
         for x in numbers:
@@ -96,7 +101,6 @@ def covid(days, growth, compliance_rate):
                 running_total += float(x[i])
             total.append(format(running_total, '.0f'))
             running_total = 0
-        print(total)
 
         rows_list.append(total)
 
@@ -104,7 +108,7 @@ def covid(days, growth, compliance_rate):
         print('COVID-19 POSITIVE RESULTS -', days, 'DAY PREDICTIONS')
         print('GROWTH RATE:', growth)
         print('SOCIAL DISTANCING COMPLIANCE:', compliance_rate, '%')
-        print('DAY', 'NSW', 'QLD', 'VIC', 'TAS', 'WA', 'SA', 'NT', 'ACT', 'TOTAL')
+        print('DAY', *states, 'TOTAL')
         print('---------------------------------------')
 
         # print data out in table like format
@@ -117,7 +121,11 @@ def covid(days, growth, compliance_rate):
         # for x, y, z, a, b, c, d, e in zip(*rows_list):
         #     print(x, y, z, a, b, c, d, e)
 
-        answer = False
+        answer = input('Calculate again? (Y/N): ')
+        if answer == 'Y' or answer == 'y':
+            cont = True
+        else:
+            cont = False
 
 
-covid(5, 1.5, 30)
+covid()
